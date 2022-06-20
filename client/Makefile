@@ -1,2 +1,2 @@
 $(OBJDIR)client:main.cpp
-	$(CC) $^ -o $@
+	$(CC) $^ -o $@ -lgmp
