@@ -6,6 +6,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <algorithm>
+#include"../lib/dfhell.h"
 
 const char *ip = "127.0.0.1";
 const char *port = "5000";
