@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 	mpz_t dh;
 	mpz_init(dh);
 	exchangeDhKey(sockfd, dh);
-	gmp_printf("DH得出密钥为：%Zd\n\n", dh);
+	gmp_printf("DH协商密钥为：%Zd\n\n", dh);
 	//第4步：关闭socket，释放资源。
 	close(sockfd);
 }
@@ -68,18 +68,17 @@ void exchangeDhKey(int sockfd, mpz_t s) //客户端交换
 	DH_key client_dh_key; // 客户端生成的密钥
 	mpz_t server_pub_key; // 服务器公钥
 	char buf[MAX];
-	// 初始化mpz_t类型的变量
+	// 初始化mpz_t类型变量
 	mpz_inits(client_dh_key.p, client_dh_key.g, client_dh_key.pri_key,
 			  client_dh_key.pub_key, client_dh_key.k, server_pub_key, NULL);
-	printf("将生成大素数p并发送=...\n");
-	//getchar();
+	printf("生成大素数p=...\n");
 	generate_p(client_dh_key.p);
 	gmp_printf("p = %Zd\n\n", client_dh_key.p);
 	mpz_set_ui(client_dh_key.g, (unsigned long int)5); // base g = 5
 	// 将p发送给服务器
 	bzero(buf, MAX);
 	memcpy(buf, "pri", 3);
-	int iret =0;
+	int iret = 0;
 	mpz_get_str(buf + 3, 16, client_dh_key.p);
 	if (iret = send(sockfd, buf, strlen(buf), 0) <= 0)
 	{
@@ -87,7 +86,6 @@ void exchangeDhKey(int sockfd, mpz_t s) //客户端交换
 	}
 	// 生成客户端的私钥a
 	printf("即将生成客户端私钥与公钥...\n");
-	// getchar();
 	generate_pri_key(client_dh_key.pri_key);
 	gmp_printf("客户端的私钥为%Zd\n\n", client_dh_key.pri_key);
 
@@ -104,7 +102,7 @@ void exchangeDhKey(int sockfd, mpz_t s) //客户端交换
 	{
 		printf("iret = %d\n", iret);
 	}
-	//read(sockfd, buf, sizeof(buf));
+	// read(sockfd, buf, sizeof(buf));
 	mpz_set_str(server_pub_key, buf + 3, 16); // 按16进制将buf传递给server_pub_key
 
 	gmp_printf("服务器的公钥为%Zd\n\n", server_pub_key);
@@ -120,7 +118,7 @@ void exchangeDhKey(int sockfd, mpz_t s) //客户端交换
 	// printf("发送：%s\n", buffer);
 	// 客户端计算DH协议得到的密钥s
 	printf("计算客户端经过DH协议得到的密钥...\n");
-	//getchar();
+	// getchar();
 	mpz_powm(client_dh_key.k, server_pub_key, client_dh_key.pri_key,
 			 client_dh_key.p);
 	mpz_set(s, client_dh_key.k); // 将密钥传递给s

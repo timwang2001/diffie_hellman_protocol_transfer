@@ -90,7 +90,6 @@ void exchange_dh_key(int sockfd, mpz_t s)
 	{
 		printf("iret = %d\n", iret);
 	}
-	//read(sockfd, buf, sizeof(buf));
 	mpz_set_str(server_dh_key.p, buf + 3, 16); // 将p写入server_dh_key.p
 	gmp_printf("p = %Zd\n\n", server_dh_key.p);
 
@@ -106,28 +105,23 @@ void exchange_dh_key(int sockfd, mpz_t s)
 	// 将服务器公钥发送给客户端
 	bzero(buf, MAX);
 	printf("发送公钥给客户端，并接收客户端公钥...\n");
-	// getchar();
 	memcpy(buf, "pub", 3);
 	mpz_get_str(buf + 3, 16, server_dh_key.pub_key);
-	//write(sockfd, buf, sizeof(buf));
 	if (iret = send(sockfd, buf, strlen(buf), 0) <= 0)
 	{
 		perror("send");
-		
 	}
 	// 接收客户端公钥
 	bzero(buf, MAX);
-	//read(sockfd, buf, sizeof(buf));
 	if ((iret = recv(sockfd, buf, sizeof(buf), 0)) <= 0)
 	{
 		printf("iret = %d\n", iret);
 	}
 	mpz_set_str(client_pub_key, buf + 3, 16);
 	gmp_printf("客户端公钥为%Zd\n\n", client_pub_key);
-
 	// 服务器计算DH协议生成的密钥s
 	printf("计算服务器端经过DH协议得到的密钥...\n");
-	//getchar();
+	// getchar();
 	mpz_powm(server_dh_key.k, client_pub_key, server_dh_key.pri_key,
 			 server_dh_key.p);
 	mpz_set(s, server_dh_key.k);

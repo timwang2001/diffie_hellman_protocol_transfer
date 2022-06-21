@@ -43,8 +43,6 @@ void generate_p(mpz_t prime)
         mpz_nextprime(prime, prime);
     }
 }
-
-/* generate private key of client */
 void generate_pri_key(mpz_t pri_key)
 {
     get_random_int(pri_key, (unsigned long int)64);
