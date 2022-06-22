@@ -1,4 +1,4 @@
-#include "./lib/aes_256_gcm.h"
+#include "../lib/aes_256_gcm.h"
 
 string aes_256_gcm_encrypt(string plain_text,CryptoPP::SecBlock<unsigned char>key,CryptoPP::SecBlock<unsigned char>iv)
 {
@@ -32,6 +32,14 @@ string aes_256_gcm_decrypt(string cipher_text,CryptoPP::SecBlock<unsigned char>k
     return recovered;
 }
 
+
+SecByteBlock generateiv()
+{
+	AutoSeededRandomPool prng;
+	SecByteBlock iv(AES::BLOCKSIZE);
+	prng.GenerateBlock(iv, iv.size());
+	return iv;
+}
 
 void test_aes_256_gcm_encrypt_decrypt(string plain)  //测试程序，用的是prng随机生成的key和iv
 {

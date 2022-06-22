@@ -31,10 +31,12 @@ int main(int argc, char *argv[])
 	// 根据DH协议交换信息，得到密钥dh_s
 	exchange_dh_key(clientfd, dh_s);
 	// 将密钥保存为unsigned char数组类型
-	// unsigned char key[32];
-	// mpz_get_str(key, 16, dh_s); // 将dh_s写入key
+	char key[32];
+	mpz_get_str(key, 16, dh_s); // 将dh_s写入key
 	gmp_printf("DH得出密钥为：%Zd\n", dh_s);
 	mpz_clear(dh_s); // 清除dh_s
+	// while(1)
+	// {}
 	close(listenfd);
 	return 0;
 }
@@ -93,7 +95,7 @@ void exchange_dh_key(int sockfd, mpz_t s)
 	mpz_powm(server_dh_key.k, client_pub_key, server_dh_key.pri_key,
 			 server_dh_key.p);
 	mpz_set(s, server_dh_key.k);
-
 	mpz_clears(server_dh_key.p, server_dh_key.g, server_dh_key.pri_key,
 			   server_dh_key.pub_key, server_dh_key.k, client_pub_key, NULL);
+	
 }

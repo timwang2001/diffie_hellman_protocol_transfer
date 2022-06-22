@@ -1,2 +1,2 @@
 $(OBJDIR)client:main.cpp
-	$(CC) $^ -o $@ -lgmp -O
+	$(CC) $^ -o $@ -lgmp -O -lcryptopp

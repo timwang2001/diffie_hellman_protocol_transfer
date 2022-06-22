@@ -1,12 +1,13 @@
 //需要提前下载安装cryptopp库，并作为头文件包含
-#include "./cryptopp/cryptlib.h"
-#include "./cryptopp/rijndael.h"
-#include "./cryptopp/modes.h"
-#include "./cryptopp/files.h"
-#include "./cryptopp/osrng.h"
-#include "./cryptopp/hex.h"
-#include "./cryptopp/gcm.h"
-#include "./cryptopp/filters.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/rijndael.h"
+#include "cryptopp/modes.h"
+#include "cryptopp/files.h"
+#include "cryptopp/osrng.h"
+#include "cryptopp/hex.h"
+#include "cryptopp/gcm.h"
+#include "cryptopp/filters.h"
+#include "cryptopp/cryptlib.h"
 #include <iostream>
 #include <string>
 
