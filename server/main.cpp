@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 	// 将密钥保存为unsigned char数组类型
 	// unsigned char key[32];
 	// mpz_get_str(key, 16, dh_s); // 将dh_s写入key
-	gmp_printf("DH得出密钥为：%Zd\n\n", dh_s);
+	gmp_printf("DH得出密钥为：%Zd\n", dh_s);
 	mpz_clear(dh_s); // 清除dh_s
 	close(listenfd);
 	return 0;
@@ -50,7 +50,7 @@ void exchange_dh_key(int sockfd, mpz_t s)
 	//  从客户端接收p
 	bzero(buf, MAX);
 
-	printf("等待从客户端接收p...\n\n");
+	//printf("等待从客户端接收p...\n\n");
 
 	int iret = 0;
 	bzero(buf, MAX);
@@ -62,17 +62,17 @@ void exchange_dh_key(int sockfd, mpz_t s)
 	gmp_printf("p = %Zd\n\n", server_dh_key.p);
 
 	// 生成服务器私钥
-	printf("将生成服务器端私钥与公钥\n\n");
+	//printf("将生成服务器端私钥与公钥\n\n");
 	generate_pri_key(server_dh_key.pri_key);
-	gmp_printf("服务器的私钥为%Zd\n\n", server_dh_key.pri_key);
+	gmp_printf("服务器的私钥为%Zd\n", server_dh_key.pri_key);
 	// calc the public key B of server
 	mpz_powm(server_dh_key.pub_key, server_dh_key.g, server_dh_key.pri_key,
 			 server_dh_key.p);
-	gmp_printf("服务器的公钥为%Zd\n\n", server_dh_key.pub_key);
+	gmp_printf("服务器的公钥为%Zd\n", server_dh_key.pub_key);
 
 	// 将服务器公钥发送给客户端
 	bzero(buf, MAX);
-	printf("发送公钥给客户端，并接收客户端公钥...\n");
+	//printf("发送公钥给客户端，并接收客户端公钥...\n");
 	memcpy(buf, "pub", 3);
 	mpz_get_str(buf + 3, 16, server_dh_key.pub_key);
 	if (iret = send(sockfd, buf, strlen(buf), 0) <= 0)
@@ -86,9 +86,9 @@ void exchange_dh_key(int sockfd, mpz_t s)
 		printf("iret = %d\n", iret);
 	}
 	mpz_set_str(client_pub_key, buf + 3, 16);
-	gmp_printf("客户端公钥为%Zd\n\n", client_pub_key);
+	gmp_printf("客户端公钥为%Zd\n", client_pub_key);
 	// 服务器计算DH协议生成的密钥s
-	printf("计算服务器端经过DH协议得到的密钥...\n");
+	//printf("DH协议得到的密钥\n");
 	// getchar();
 	mpz_powm(server_dh_key.k, client_pub_key, server_dh_key.pri_key,
 			 server_dh_key.p);

@@ -1,2 +1,2 @@
 $(SERDIR)server:main.cpp
-	$(CC) $^ -o $@ -lgmp
+	$(CC) $^ -o $@ -lgmp -O
