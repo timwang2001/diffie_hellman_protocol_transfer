@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <cmath>
 #include "../lib/dfhell.h"
+#include "../lib/socket.h"
 const char *port = "5000";
 #define MAX 1024
 
@@ -23,45 +24,12 @@ int main(int argc, char *argv[])
 	// }
 
 	// 第1步：创建服务端的socket。
-	int listenfd;
-	if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
-	{
-		perror("socket");
-		return -1;
-	}
-
-	//第2步：把服务端用于通信的地址和端口绑定到socket上。
-	struct sockaddr_in servaddr;
-	memset(&servaddr, 0, sizeof(servaddr));
-	servaddr.sin_family = AF_INET;
-	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	// servaddr.sin_addr.s_addr = inet_addr("192.168.190.134);
-	servaddr.sin_port = htons(atoi(port));
-
-	if (bind(listenfd, (struct sockaddr *)&servaddr, sizeof(servaddr)) != 0)
-	{
-		perror("bind");
-		close(listenfd);
-		return -1;
-	}
-	if (listen(listenfd, 5) != 0)
-	{
-		perror("listen");
-		close(listenfd);
-		return -1;
-	}
-	//第3步，把socket设置为监听模式。
-	int clientfd;
-	int socklen = sizeof(struct sockaddr_in);
-	struct sockaddr_in clientaddr;
-	clientfd = accept(listenfd, (struct sockaddr *)&clientaddr, (socklen_t *)&socklen);
-	printf("客户端（%s）已连接。\n", inet_ntoa(clientaddr.sin_addr));
-
+	int listenfd,clientfd;
+	clientfd =  bindandlisten(listenfd,port);//建立socket绑定port端口
 	mpz_t dh_s;
 	mpz_init(dh_s);
 	// 根据DH协议交换信息，得到密钥dh_s
 	exchange_dh_key(clientfd, dh_s);
-
 	// 将密钥保存为unsigned char数组类型
 	// unsigned char key[32];
 	// mpz_get_str(key, 16, dh_s); // 将dh_s写入key

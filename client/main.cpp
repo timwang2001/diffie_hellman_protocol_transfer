@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <cmath>
 #include "../lib/dfhell.h"
+#include "../lib/socket.h"
 #define MAX 1024
 const char *ip = "127.0.0.1";
 const char *port = "5000";
@@ -20,47 +21,18 @@ int main(int argc, char *argv[])
 	// 	printf("Using:./client ip port\nExample:./client 127.0.0.1 5005\n\n");
 	// 	return -1;
 	// }
-
-	//第1步：创建客户端的socket。
+	//创建客户端的socket。
 	int sockfd;
-	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
-	{
-		perror("socket");
-		return -1;
-	}
-
-	//第2步：向服务器发起连接请求。
-	struct hostent *h;
-	if ((h = gethostbyname(ip)) == 0)
-	{
-		printf("gethostbyname failed.\n");
-		close(sockfd);
-		return -1;
-	}
-
-	struct sockaddr_in servaddr;
-	memset(&servaddr, 0, sizeof(servaddr));
-	servaddr.sin_family = AF_INET;
-	servaddr.sin_port = htons(atoi(port));
-	memcpy(&servaddr.sin_addr, h->h_addr, h->h_length);
-
-	if (connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr)) != 0)
-	{
-		perror("connect");
-		close(sockfd);
-		return -1;
-	}
-
+	connect(sockfd,ip,port);
 	char buffer[1024];
 	memset(buffer, 0, sizeof(buffer));
-
-	//第3步：与服务端通信，发送一个报文后等待回复，然后再发下一个报文。
+	//与服务端通信，发送一个报文后等待回复再发下一个报文。
 	int iret;
 	mpz_t dh;
 	mpz_init(dh);
 	exchangeDhKey(sockfd, dh);
 	gmp_printf("DH协商密钥为：%Zd\n\n", dh);
-	//第4步：关闭socket，释放资源。
+	//关闭socket
 	close(sockfd);
 }
 void exchangeDhKey(int sockfd, mpz_t s) //客户端交换
