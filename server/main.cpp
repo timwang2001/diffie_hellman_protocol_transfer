@@ -37,6 +37,21 @@ int main(int argc, char *argv[])
 	mpz_clear(dh_s); // 清除dh_s
 	// while(1)
 	// {}
+	int iret = 0;
+	char buff[MAX];
+	if ((iret = recv(clientfd, buff, sizeof(buff), 0)) <= 0)
+	{
+		printf("iret = %d\n", iret);
+	}
+	char iv[16];
+	for(int i=0;i<17;i++)
+		iv[i]=buff[i];
+	printf("%s\n%ld\n",iv,strlen(iv));
+	printf("\n***********start transfer**************\n");
+	while(1)
+	{
+		
+	}
 	close(listenfd);
 	return 0;
 }
