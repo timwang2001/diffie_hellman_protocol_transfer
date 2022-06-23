@@ -8,6 +8,9 @@
 #include <arpa/inet.h>
 #include <algorithm>
 #include <cmath>
+#include <iterator>
+#include <sstream>
+#include <iomanip>
 #include "../lib/dfhell.h"
 #include "../lib/socket.h"
 #include "../aes_gcm/aes_256_gcm.cpp"
@@ -15,6 +18,9 @@
 const char *ip = "127.0.0.1";
 const char *port = "5000";
 void exchangeDhKey(int sockfd, mpz_t s);
+void printhex(const char* temp);
+
+
 int main(int argc, char *argv[])
 {
 	// if(argc != 3)
@@ -33,34 +39,51 @@ int main(int argc, char *argv[])
 	mpz_init(dh);
 	exchangeDhKey(sockfd, dh);
 	gmp_printf("DH协商密钥为：%Zd\n", dh);
+	char key[32];
+	mpz_get_str(key, 16, dh); // 将dh_s写入key
 	//关闭socket
 	char buff[MAX];
+	SecByteBlock iv = generateiv();
 	while(1)
 	{
-		SecByteBlock iv = generateiv();
 		string s = string(iv.begin(), iv.end());
-		//cout<<s<<endl;
 		int l=s.length();
-		//cout<<l<<endl;
 		int i;
 		for(i=0;i<s.length();i++)
 			buff[i]=s[i];
 		buff[i] = '\0';
 		printf("%s\n%ld\n", buff,strlen(buff));
+
 		// cout<<strlen(buff)<<endl;
 		if(strlen(buff)==(long int)16) break;
 		
 	}
-	
+	//发送iv
 	if (iret = send(sockfd, buff, 17, 0) <= 0)
 	{
 		perror("send");
 	}
 	printf("\n***********start transfer**************\n");
+	unsigned char t[MAX];
+	for(int i=0;i<strlen(key);i++)
+		t[i]=key[i];
+	SecByteBlock aeskey(t,AES::MAX_KEYLENGTH);
 	while(1)
 	{
+		bzero(buff, MAX);
 		scanf("%s",&buff);
-		printf("%s",buff);
+		// printf("%s",buff);
+		//将发送aes加密后的buff
+		string temp = aes_256_gcm_encrypt(buff,aeskey,iv);
+		printf("%s",temp);
+		const char* ciphers = temp.data();
+		cout<<strlen(ciphers)<<endl;
+		printhex(ciphers);
+		if (iret = send(sockfd, ciphers, (int)strlen(ciphers), 0) <= 0)
+		{
+			perror("send");
+			break;
+		}
 
 	}
 	close(sockfd);
@@ -128,4 +151,19 @@ void exchangeDhKey(int sockfd, mpz_t s) //客户端交换
 	// 清除mpz_t变量
 	mpz_clears(client_dh_key.p, client_dh_key.g, client_dh_key.pri_key,
 			   client_dh_key.pub_key, client_dh_key.k, server_pub_key, NULL);
+}
+void printhex(const char* temp)//以hex方式输出字符串
+{
+	std::stringstream ss;
+	for (int i = 0; i<7; i++)
+	{
+		
+		int tm = temp[i];
+		ss << std::hex << std::setw(2) << std::setfill('0') << tm;//见下文注释
+		ss << " ";
+	}
+	string c = ss.str();
+	string d;
+	transform(c.begin(), c.end(), back_inserter(d), ::toupper);//将小写转化为大写
+	std::cout << "string is : " << d << std::endl;
 }
