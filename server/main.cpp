@@ -50,19 +50,19 @@ void exchange_dh_key(int sockfd, mpz_t s);
 // 	return fixedlen;
 // }
 
-void printhex(char* temp)
+void printhex(char *temp)
 {
 	std::stringstream ss;
-	for (int i = 0; i<7; i++)
+	for (int i = 0; i < strlen(temp); i++)
 	{
-		
+
 		int tm = temp[i];
-		ss << std::hex << std::setw(2) << std::setfill('0') << tm;//见下文注释
-		ss << " ";
+		ss << std::hex << std::setw(2) << std::setfill('0') << tm; //见下文注释
+																   // ss << " ";
 	}
 	string c = ss.str();
 	string d;
-	transform(c.begin(), c.end(), back_inserter(d), ::toupper);//将小写转化为大写
+	transform(c.begin(), c.end(), back_inserter(d), ::toupper); //将小写转化为大写
 	std::cout << "string is : " << d << std::endl;
 }
 
@@ -93,18 +93,19 @@ int main(int argc, char *argv[])
 	{
 		printf("iret = %d\n", iret);
 	}
-	char ivc[16];
-	for (int i = 0; i < 17; i++)
+	byte ivc[16];
+	for (int i = 0; i < 16; i++)
 		ivc[i] = buff[i];
-	printf("%s\n%ld\n", ivc, strlen(ivc));
-	unsigned char t[MAX];
-	for (int i = 0; i < strlen(ivc); i++)
-		t[i] = ivc[i];
-	SecByteBlock iv(t, AES::BLOCKSIZE);
+	//freopen("iv.txt", "wb", stdout);
+	// printf("%s\n%ld\n", ivc, strlen(ivc));
+	//printf("%s", ivc);
+	//fclose(stdout);
+	SecByteBlock iv(ivc, AES::BLOCKSIZE);
 	printf("\n***********start transfer**************\n");
+	unsigned char tt[MAX];
 	for (int i = 0; i < strlen(key); i++)
-		t[i] = key[i];
-	SecByteBlock aeskey(t, AES::MAX_KEYLENGTH);
+		tt[i] = key[i];
+	SecByteBlock aeskey(tt, AES::MAX_KEYLENGTH);
 	while (1)
 	{
 		memset(buff, 0, sizeof(buff));
@@ -114,11 +115,12 @@ int main(int argc, char *argv[])
 			printf("iret = %d\n", iret);
 			break;
 		}
-		string temp = buff;
-		printf("%s-len=%d\n", buff, strlen(buff));
-		printhex(buff);
-		aes_256_gcm_decrypt(temp,aeskey,iv);
-
+		string temp;
+		temp.assign(buff,strlen(buff));
+		// cout << temp;
+		// printf("\n-len=%ld\n", temp.length());
+		// printhex(buff);
+		test_aes_256_gcm_encrypt_decrypt(temp, aeskey, iv, 0);
 	}
 	close(listenfd);
 	return 0;

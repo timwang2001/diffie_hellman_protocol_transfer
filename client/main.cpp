@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 		for(i=0;i<s.length();i++)
 			buff[i]=s[i];
 		buff[i] = '\0';
-		printf("%s\n%ld\n", buff,strlen(buff));
+		// printf("%s\n%ld\n", buff,strlen(buff));
 
 		// cout<<strlen(buff)<<endl;
 		if(strlen(buff)==(long int)16) break;
@@ -74,11 +74,14 @@ int main(int argc, char *argv[])
 		scanf("%s",&buff);
 		// printf("%s",buff);
 		//将发送aes加密后的buff
-		string temp = aes_256_gcm_encrypt(buff,aeskey,iv);
-		printf("%s",temp);
+		//string temp = aes_256_gcm_encrypt(buff,aeskey,iv);
+		// printf("\n");
+		string temp = test_aes_256_gcm_encrypt_decrypt(buff,aeskey,iv,1);
+		// printf("-len=");
+		//printf("%s",temp);
 		const char* ciphers = temp.data();
-		cout<<strlen(ciphers)<<endl;
-		printhex(ciphers);
+		// cout<<strlen(ciphers)<<endl;
+		// printhex(ciphers);
 		if (iret = send(sockfd, ciphers, (int)strlen(ciphers), 0) <= 0)
 		{
 			perror("send");
@@ -155,12 +158,11 @@ void exchangeDhKey(int sockfd, mpz_t s) //客户端交换
 void printhex(const char* temp)//以hex方式输出字符串
 {
 	std::stringstream ss;
-	for (int i = 0; i<7; i++)
+	for (int i = 0; i<strlen(temp); i++)
 	{
-		
 		int tm = temp[i];
 		ss << std::hex << std::setw(2) << std::setfill('0') << tm;//见下文注释
-		ss << " ";
+		//ss << "";
 	}
 	string c = ss.str();
 	string d;

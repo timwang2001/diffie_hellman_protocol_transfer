@@ -3,3 +3,6 @@
 cryptopp/
 *.exe
 *.a
+test.*
+test
+*.txt
