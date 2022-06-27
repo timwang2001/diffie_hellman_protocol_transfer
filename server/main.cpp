@@ -68,15 +68,15 @@ void printhex(char *temp)
 
 int main(int argc, char *argv[])
 {
-	// if(argc != 2)
-	// {
-	// 	printf("Using:./server port\nExample:./server 5005\n\n");
-	// 	return -1;
-	// }
+	if(argc != 2)
+	{
+		printf("Using:./server port\nExample:./server 5005\n\n");
+		return -1;
+	}
 
 	// 第1步：创建服务端的socket。
 	int listenfd, clientfd;
-	clientfd = bindandlisten(listenfd, port); //建立socket绑定port端口
+	clientfd = bindandlisten(listenfd, argv[1]); //建立socket绑定port端口
 	mpz_t dh_s;
 	mpz_init(dh_s);
 	// 根据DH协议交换信息，得到密钥dh_s
