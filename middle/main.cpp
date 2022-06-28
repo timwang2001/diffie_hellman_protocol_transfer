@@ -16,22 +16,22 @@
 #include "../aes_gcm/aes_256_gcm.cpp"
 #define MAX 1024
 // const char *ip = "127.0.0.1";
-// const char *port = "5000";
+const char *port = "5000";
 void exchangewithserver(int sockfd, mpz_t s);
 void exchangewithclient(int sockfd, mpz_t s);
 
 void printhex(const char *temp);
 int main(int argc, char *argv[])
 {
-	if (argc != 4)
+	if (argc != 3)
 	{
-		printf("Using:./middle serverip clientip port\n\n");
+		printf("Using:./middle serverip  port\n\n");
 		return -1;
 	}
 
 	// 第1步：创建服务端的socket。
 	int listenfd, clientfd;
-	clientfd = bindandlisten(listenfd, argv[3]); //建立socket绑定port端口
+	clientfd = bindandlisten(listenfd, argv[2]); //建立socket绑定port端口
 	mpz_t dh_s;
 	mpz_init(dh_s);
 	// 根据DH协议交换信息，得到密钥dh_s
@@ -41,16 +41,28 @@ int main(int argc, char *argv[])
 	mpz_get_str(ckey, 16, dh_s); // 将dh_s写入key
 	gmp_printf("与client协商DH得出密钥为：%Zd\n", dh_s);
 	mpz_clear(dh_s); // 清除dh_s
+	int iret;
+	char buff[MAX];
+	if ((iret = recv(clientfd, buff, sizeof(buff), 0)) <= 0)
+	{
+		printf("iret = %d\n", iret);
+	}
+	byte ivcc[16];
+	for (int i = 0; i < 16; i++)
+		ivcc[i] = buff[i];
 
+	SecByteBlock ivc(ivcc, AES::BLOCKSIZE); //中间人与client之间的
+	unsigned char tt[MAX];
+	for (int i = 0; i < strlen(ckey); i++)
+		tt[i] = ckey[i];
+	SecByteBlock aeskeyc(tt, AES::MAX_KEYLENGTH); // client & middle
 	//*********************************************************************/
 	int sockfd;
 	// connect(sockfd, ip, port);
-	connect(sockfd, argv[1], argv[3]);
-
-	char buffer[1024];
-	memset(buffer, 0, sizeof(buffer));
+	//connect(sockfd, argv[1], argv[2]);
+	connect(sockfd, argv[1], port);
 	//与服务端通信，发送一个报文后等待回复再发下一个报文。
-	int iret;
+
 	mpz_t dh;
 	mpz_init(dh);
 	exchangewithserver(sockfd, dh);
@@ -58,7 +70,7 @@ int main(int argc, char *argv[])
 	char keys[32];			   // server key
 	mpz_get_str(keys, 16, dh); // 将dh_s写入key
 	//关闭socket
-	char buff[MAX];
+
 	SecByteBlock ivs = generateiv(); //中间人与server之间的
 	while (1)
 	{
@@ -85,22 +97,9 @@ int main(int argc, char *argv[])
 	SecByteBlock aeskeys(t, AES::MAX_KEYLENGTH);
 
 	iret = 0;
-	bzero(buff, MAX);
-	if ((iret = recv(clientfd, buff, sizeof(buff), 0)) <= 0)
-	{
-		printf("iret = %d\n", iret);
-	}
-	byte ivcc[16];
-	for (int i = 0; i < 16; i++)
-		ivcc[i] = buff[i];
-
-	SecByteBlock ivc(ivcc, AES::BLOCKSIZE); //中间人与client之间的
-
+	// bzero(buff, MAX);
+	memset(buff,0,sizeof(buff));
 	printf("\n***********start transfer**************\n");
-	unsigned char tt[MAX];
-	for (int i = 0; i < strlen(ckey); i++)
-		tt[i] = ckey[i];
-	SecByteBlock aeskeyc(tt, AES::MAX_KEYLENGTH); // client & middle
 
 	while (1)
 	{
@@ -116,7 +115,7 @@ int main(int argc, char *argv[])
 		string recoverd = " "; // from client
 		recoverd = test_aes_256_gcm_encrypt_decrypt(temp, aeskeyc, ivc, 0);
 		// received --
-
+		recoverd = recoverd + "hacked";
 		temp = test_aes_256_gcm_encrypt_decrypt(recoverd, aeskeys, ivs, 1); // encrypt
 		const char *ciphers = temp.data();
 		if (iret = send(sockfd, ciphers, (int)strlen(ciphers), 0) <= 0)
