@@ -96,7 +96,7 @@ fir:int listenfd, clientfd;
 	byte ivc[16];
 	for (int i = 0; i < 16; i++)
 		ivc[i] = buff[i];
-	//freopen("iv.txt", "wb", stdout);
+	// freopen("iv.txt", "wb", stdout);
 	// printf("%s\n%ld\n", ivc, strlen(ivc));
 	//printf("%s", ivc);
 	//fclose(stdout);
@@ -132,7 +132,10 @@ fir:int listenfd, clientfd;
             {
                 flag=true;
                 close(clientfd); //释放套接字，回到开头
-                goto fir;
+				close(listenfd);
+                //goto fir;
+				printf("\nerror!\n");
+				return 0;
             }
         }
         else //验证通过后，正常解密接收的消息
