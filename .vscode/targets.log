@@ -6,7 +6,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun 30 19:23:32 2022
+# Make data base, printed on Thu Jun 30 19:53:02 2022
 
 # Variables
 
@@ -31,7 +31,8 @@ VSCODE_LOG_NATIVE = false
 # environment
 HOMEDRIVE = C:
 # automatic
-@F = $(notdir $@)
+@F = $(n 
+otdir $@)
 # automatic
 ^D = $(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
 # makefile
@@ -357,6 +358,6 @@ clean:
 # strcache performance: lookups = 38 / hit rate = 52%
 # hash-table stats:
 # Load=18/8192=0%, Rehash=0, Collisions=1/38=3%
-# Finished Make data base on Thu Jun 30 19:23:32 2022
+# Finished Make data base on Thu Jun 30 19:53:02 2022
 
  
