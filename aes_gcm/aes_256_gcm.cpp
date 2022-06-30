@@ -13,7 +13,6 @@ string aes_256_gcm_encrypt(string plain_text, CryptoPP::SecBlock<unsigned char> 
 	);																	   // StringSource
 
 	std::cout << "cipher text: " << cipher << " len=" << cipher.length() << std::endl;
-	// printf("%X\n",cipher);
 	return cipher;
 }
 
@@ -41,15 +40,7 @@ SecByteBlock generateiv()
 
 string test_aes_256_gcm_encrypt_decrypt(string plain, SecByteBlock key, SecByteBlock iv, int flag) //测试程序，用的是prng随机生成的key和iv
 {
-	//AutoSeededRandomPool prng;
 	HexEncoder encoder(new FileSink(std::cout));
-
-	// SecByteBlock key(AES::DEFAULT_KEYLENGTH); //DEFAULT_KEYLENGTH是16字节，128位的AES密钥
-	// SecByteBlock key(AES::MAX_KEYLENGTH); //MAX_KEYLENGTH是32字节，256位密钥
-	// SecByteBlock iv(AES::BLOCKSIZE);
-
-	// prng.GenerateBlock(key, key.size());
-	//  prng.GenerateBlock(iv, iv.size());
 
 	std::string cipher, recovered;
 	if (flag == 1)
@@ -63,9 +54,6 @@ string test_aes_256_gcm_encrypt_decrypt(string plain, SecByteBlock key, SecByteB
 					 new AuthenticatedEncryptionFilter(e,
 													   new StringSink(cipher)) // AuthenticatedEncryptionFilter
 		);																	   // StringSource
-
-		// std::cout << "cipher text: " << cipher << std::endl;
-
 		return cipher;
 	}
 	else

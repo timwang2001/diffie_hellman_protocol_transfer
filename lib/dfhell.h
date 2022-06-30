@@ -23,7 +23,6 @@ void get_random_int(mpz_t z, mp_bitcnt_t n)
     } while (mpz_cmp_ui(temp, (unsigned long int)0) <= 0);
     mpz_mul(z, z, temp); // 两个随机数相乘
     mpz_clear(temp);
-    //gmp_printf("%Zd\n%Zd\n", temp, z);
 }
 // 检测一个数是否为素数，是则返回2，
 // 可能是返回1，不是返回0
