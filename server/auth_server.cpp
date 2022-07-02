@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 	}
 
 	// 第1步：创建服务端的socket。
-fir:int listenfd, clientfd;
+	int listenfd, clientfd;
 	clientfd = bindandlisten(listenfd, argv[1]); //建立socket绑定port端口
 	mpz_t dh_s;
 	mpz_init(dh_s);
@@ -82,7 +82,6 @@ fir:int listenfd, clientfd;
                 flag=true;
                 close(clientfd); //释放套接字，回到开头
 				close(listenfd);
-                //goto fir;
 				printf("\nerror!\n");
 				return 0;
             }

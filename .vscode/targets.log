@@ -6,7 +6,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun 30 19:53:02 2022
+# Make data base, printed on Sat Jul 02 08:23:47 2022
 
 # Variables
 
@@ -31,8 +31,7 @@ VSCODE_LOG_NATIVE = false
 # environment
 HOMEDRIVE = C:
 # automatic
-@F = $(n 
-otdir $@)
+@F = $(notdir $@)
 # automatic
 ^D = $(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
 # makefile
@@ -62,7 +61,7 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-cc8626d6-a813-4a62-95d4-be2f7a08f28d-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-c26d24c8-56c9-4c2a-b2b1-dff34c7156aa-sock
 # environment
 VSCODE_CWD = S:\coding_programs\Microsoft VS Code
 # default
@@ -100,7 +99,7 @@ ELECTRON_RUN_AS_NODE = 1
 # makefile (from 'Makefile', line 15)
 OBJLINK := 
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_25428_HGGUDWFHFRAGEZYF
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_12456_IJLBBTOIIGZFCRBE
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
@@ -232,7 +231,7 @@ PROCESSOR_LEVEL = 6
 # environment
 FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
-VSCODE_PID = 25428
+VSCODE_PID = 12456
 # environment
 USERDOMAIN_ROAMINGPROFILE = SOGK1997
 # variable set hash-table stats:
@@ -244,9 +243,9 @@ USERDOMAIN_ROAMINGPROFILE = SOGK1997
 
 # Directories
 
-# . (key c:/Users/lkrwz/Desktop/2022����ѧ��/�γ����/�γ���Ƣ�/diffie_hellman_protocol, mtime 1656588210): 12 files, no impossibilities.
+# . (key c:/Users/lkrwz/Desktop/2022����ѧ��/�γ����/�γ���Ƣ�/diffie_hellman_protocol, mtime 1656634828): 13 files, no impossibilities.
 
-# 12 files, no impossibilities in 1 directories.
+# 13 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -352,12 +351,12 @@ clean:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 18 / storage = 123 B / avg = 6 B
-# current buf: size = 8162 B / used = 123 B / count = 18 / avg = 6 B
+# strcache buffers: 1 (0) / strings = 19 / storage = 128 B / avg = 6 B
+# current buf: size = 8162 B / used = 128 B / count = 19 / avg = 6 B
 
-# strcache performance: lookups = 38 / hit rate = 52%
+# strcache performance: lookups = 39 / hit rate = 51%
 # hash-table stats:
-# Load=18/8192=0%, Rehash=0, Collisions=1/38=3%
-# Finished Make data base on Thu Jun 30 19:53:02 2022
+# Load=19/8192=0%, Rehash=0, Collisions=1/39=3%
+# Finished Make data base on Sat Jul 02 08:23:47 2022
 
  
