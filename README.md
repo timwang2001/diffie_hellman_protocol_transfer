@@ -116,7 +116,7 @@ make static dynamic cryptest.exe
 
 部分执行截图如下：
 
-![image-20220620160209137](../diffie_hellman_protocol/imgs/install_cryptopp.png)
+![image-20220620160209137](imgs/install_cryptopp.png)
 
 生成并安装动态链接库，如下图所示：
 
@@ -124,7 +124,7 @@ make static dynamic cryptest.exe
 sudo make install PREFIX=/usr/local 
 ```
 
-![image-20220620161740045](../diffie_hellman_protocol/imgs/install_cryptopp1.png)
+![image-20220620161740045](imgs/install_cryptopp1.png)
 
 至此，就可以正常调用cryptopp库中的相关函数。如果报错`error while loading shared libraries: libcryptopp.so.5.6: cannot open shared object file: No such file or directory`。则需要运行下面的命令，重新创建共享库的链接文件：
 
@@ -199,7 +199,7 @@ https://github.com/litcu/Diffie-Hellman-AES-Middle-PSK/blob/master/client/aes_cl
 
 128位AES加密流程示例如下图所示：
 
-![image-20220621182017821](../diffie_hellman_protocol/imgs/aes.png)
+![image-20220621182017821](imgs/aes.png)
 
 AES的流程会分为几部分：`密钥拓展`、`轮密钥加`、`字节代换`、`行位移`、`列混淆`。 其中后面四步会在迭代中循环执行，也在解密中会有对应的逆操作。
 
@@ -235,7 +235,7 @@ arpspoof [-i interface] [-c own|host|both] [-t target] [-r host]
 sudo arpspoof -i eth0 -t 192.168.17.14 -r 192.168.17.12
 ```
 
-![image-20220626204309528](../diffie_hellman_protocol/imgs/arpspoof.png)
+![image-20220626204309528](imgs/arpspoof.png)
 
 arp欺骗的结果部分如下：
 
@@ -262,7 +262,7 @@ ettercap -T -q -i ens33 -M ARP:remote //192.168.17.14/ //192.168.17.12/ # 使用
 
 欺骗后，通过中间人的wireshark进行查看，如下图所示，使用过滤规则：`ip.src==192.168.17.14&&ip.dst==192.168.17.2`进行过滤处理，得到因为arp欺骗而途径中间人攻击机的数据包。
 
-![image-20220628152825866](../diffie_hellman_protocol/imgs/ettercap_wireshark.png)
+![image-20220628152825866](imgs/ettercap_wireshark.png)
 
 ## 5.中间人攻击预防
 
@@ -317,7 +317,7 @@ void out2sfile(unsigned char bytes,string filename)  //字符串形式重定向�
 
 如下图所示的选定ip为192.168.17.18的网卡进行本地测试，成功运行。
 
-![image-20220628154842976](../diffie_hellman_protocol/imgs/local_eth.png)
+![image-20220628154842976](imgs/local_eth.png)
 
 但当使用回环网卡127.0.0.1及多机进行测试，就会报错
 
